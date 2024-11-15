@@ -6,19 +6,24 @@ public class EnemyX : MonoBehaviour
 {
     public float speed;
     private Rigidbody enemyRb;
-    private GameObject playerGoal;
+    private GameObject player;
+
+    private SpawnManagerX spawnManagerX;
 
     // Start is called before the first frame update
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();
+        player = GameObject.Find("Player");
+        spawnManagerX = GameObject.Find("Spawn Manager").GetComponent<SpawnManagerX>();
+        speed = spawnManagerX.enemySpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Set enemy direction towards player goal and move there
-        Vector3 lookDirection = (playerGoal.transform.position - transform.position).normalized;
+        Vector3 lookDirection = (player.transform.position - transform.position).normalized;
         enemyRb.AddForce(lookDirection * speed * Time.deltaTime);
 
     }
@@ -26,11 +31,11 @@ public class EnemyX : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         // If enemy collides with either goal, destroy it
-        if (other.gameObject.name == "Enemy Goal")
+        if (other.gameObject.name == "Player")
         {
             Destroy(gameObject);
         } 
-        else if (other.gameObject.name == "Player Goal")
+        else if (other.gameObject.name == "Player")
         {
             Destroy(gameObject);
         }
